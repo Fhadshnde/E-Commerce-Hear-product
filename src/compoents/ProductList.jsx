@@ -1,7 +1,6 @@
 import React from "react";
 import { useCart } from "../conText/store";
 import dummyData from '../data'
-import Navbar from "./Navbar";
 
 const ProductCard = ({ title, description, price, image }) => {
   const { addToCart } = useCart();

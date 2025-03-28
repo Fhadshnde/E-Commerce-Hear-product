@@ -1,9 +1,6 @@
 import { useCart } from "../conText/store";
 import React, { useState } from "react";
-import { IoIosBasket } from "react-icons/io";
-import { Link as ScrollLink } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom"; 
-import { FiMenu, FiX } from "react-icons/fi";
 
 const CartPage = () => {
   const { cartItems } = useCart();
