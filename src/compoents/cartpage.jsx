@@ -1,0 +1,82 @@
+import { useCart } from "../conText/store";
+import React, { useState } from "react";
+import { IoIosBasket } from "react-icons/io";
+import { Link as ScrollLink } from "react-scroll";
+import { Link as RouterLink } from "react-router-dom"; 
+import { FiMenu, FiX } from "react-icons/fi";
+
+const CartPage = () => {
+  const { cartItems } = useCart();
+  const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
+
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      alert("Your cart is empty! Add products before proceeding to checkout.");
+      return;
+    }
+
+    const orderMessage = cartItems
+      .map(
+        (item, index) =>
+          `#${index + 1}: ${item.title}\nPrice: $${item.price.toFixed(2)}\nDescription: ${item.description}`
+      )
+      .join("\n\n");
+
+    const finalMessage = `Order Details:\n\n${orderMessage}\n\nTotal Price: $${totalPrice.toFixed(2)}`;
+    const whatsappUrl = `https://wa.me/9647721603705?text=${encodeURIComponent(finalMessage)}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  return (
+    <div className="min-h-screen p-6 bg-gray-100 flex flex-col items-center">
+      <Navbar />
+      <h1 className="text-4xl font-bold text-gray-800 mb-8 mt-5">Shopping Cart</h1>
+      {cartItems.length === 0 ? (
+        <div className="bg-white shadow-lg rounded-lg p-8">
+          <p className="text-center text-gray-600 text-lg">Your cart is currently empty.</p>
+        </div>
+      ) : (
+        <div className="w-full max-w-4xl">
+          <ul className="space-y-6">
+            {cartItems.map((item, index) => (
+              <li key={index} className="flex flex-col md:flex-row items-center bg-white shadow rounded-lg p-4">
+                <img src={item.image} alt={item.title} className="w-24 h-24 object-cover rounded-lg" />
+                <div className="ml-4 flex-1 text-center md:text-left">
+                  <h2 className="text-xl font-semibold text-gray-800">{item.title}</h2>
+                  <p className="text-gray-600">{item.description}</p>
+                  <p className="text-lg font-medium text-gray-900 mt-2">${item.price.toFixed(2)}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 bg-white shadow rounded-lg p-6 flex justify-between items-center">
+            <h2 className="text-2xl font-semibold text-gray-800">Total Price</h2>
+            <p className="text-2xl font-bold text-blue-600">${totalPrice.toFixed(2)}</p>
+          </div>
+          <button
+            onClick={handleCheckout}
+            className="mt-6 bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold transition duration-300 w-full"
+          >
+            Checkout via WhatsApp
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CartPage;
+
+
+const Navbar = () => {
+
+  return (
+    <div className="h-16 w-full bg-orange-100 flex justify-center items-center px-6 shadow-md sticky top-0 z-50">
+      <RouterLink to="/" className="text-lg font-bold">
+        Home
+      </RouterLink>
+      </div>
+  );
+};
+
+
