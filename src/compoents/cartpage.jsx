@@ -1,28 +1,10 @@
 import { useCart } from "../conText/store";
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom"; 
+import { Link as RouterLink } from "react-router-dom";
 
 const CartPage = () => {
-  const { cartItems } = useCart();
-  const totalPrice = cartItems.reduce((total, item) => total + item.price, 0);
-
-  const handleCheckout = () => {
-    if (cartItems.length === 0) {
-      alert("Your cart is empty! Add products before proceeding to checkout.");
-      return;
-    }
-
-    const orderMessage = cartItems
-      .map(
-        (item, index) =>
-          `#${index + 1}: ${item.title}\nPrice: $${item.price.toFixed(2)}\nDescription: ${item.description}`
-      )
-      .join("\n\n");
-
-    const finalMessage = `Order Details:\n\n${orderMessage}\n\nTotal Price: $${totalPrice.toFixed(2)}`;
-    const whatsappUrl = `https://wa.me/9647721603705?text=${encodeURIComponent(finalMessage)}`;
-    window.open(whatsappUrl, "_blank");
-  };
+  const { cartItems, updateQuantity, handleDelete } = useCart();
+  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
     <div className="min-h-screen p-6 bg-gray-100 flex flex-col items-center">
@@ -41,7 +23,32 @@ const CartPage = () => {
                 <div className="ml-4 flex-1 text-center md:text-left">
                   <h2 className="text-xl font-semibold text-gray-800">{item.title}</h2>
                   <p className="text-gray-600">{item.description}</p>
-                  <p className="text-lg font-medium text-gray-900 mt-2">${item.price.toFixed(2)}</p>
+                  <p className="text-lg font-medium text-gray-900 mt-2">
+                    ${item.price.toFixed(2)} x {item.quantity}
+                  </p>
+                  <p className="text-lg font-bold text-blue-800">
+                    Subtotal: ${(item.price * item.quantity).toFixed(2)}
+                  </p>
+                  <div className="flex items-center mt-2 space-x-2">
+                    <button
+                      onClick={() => updateQuantity(item.title, -1)}
+                      className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-1 px-3 rounded"
+                    >
+                      -
+                    </button>
+                    <button
+                      onClick={() => updateQuantity(item.title, 1)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded"
+                    >
+                      +
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.title)}
+                      className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </li>
             ))}
@@ -50,12 +57,6 @@ const CartPage = () => {
             <h2 className="text-2xl font-semibold text-gray-800">Total Price</h2>
             <p className="text-2xl font-bold text-blue-600">${totalPrice.toFixed(2)}</p>
           </div>
-          <button
-            onClick={handleCheckout}
-            className="mt-6 bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold transition duration-300 w-full"
-          >
-            Checkout via WhatsApp
-          </button>
         </div>
       )}
     </div>
@@ -64,16 +65,12 @@ const CartPage = () => {
 
 export default CartPage;
 
-
 const Navbar = () => {
-
   return (
     <div className="h-16 w-full bg-orange-100 flex justify-center items-center px-6 shadow-md sticky top-0 z-50">
       <RouterLink to="/" className="text-lg font-bold">
         Home
       </RouterLink>
-      </div>
+    </div>
   );
 };
-
-
