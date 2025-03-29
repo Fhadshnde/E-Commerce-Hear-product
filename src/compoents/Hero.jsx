@@ -1,4 +1,6 @@
 import React from "react";
+import { Link as ScrollLink } from "react-scroll";
+
 const Hero = () => {
   return (
     <div className="bg-orange-100 min-h-screen flex flex-col md:flex-row items-center p-10">
@@ -8,12 +10,17 @@ const Hero = () => {
           <p className="text-green-500 text-lg">Also Soothing</p>
         </div>
         <h1 className="text-green-500 text-[100px] md:text-[150px] font-bold">Tonder</h1>
-        <p className="text-gray-700 max-w-lg mx-auto md:mx-0">
+        <p className="text-gray-700 max-w-lg mx-auto md:mx-0 mb-6 ">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis veritatis repellat voluptate ipsa.
         </p>
-        <button to='/productList' className="bg-green-500 text-white font-bold py-3 px-6 rounded-lg mt-6 hover:bg-green-600 transition duration-300">
+        <ScrollLink
+          to="products" 
+          smooth={true}
+          duration={500}
+          className="bg-green-500 text-white font-bold py-3 px-6 rounded-lg mt-10 hover:bg-green-600 transition duration-300 cursor-pointer"
+        >
           Buy Now
-        </button>
+        </ScrollLink>
       </div>
 
       <div className="flex-1 flex justify-center">
