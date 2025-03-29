@@ -11,9 +11,12 @@ const Navbar = () => {
 
   return (
     <div className="h-16 w-full bg-orange-100 flex justify-between items-center px-6 shadow-md sticky top-0 z-50">
-      <RouterLink to="/" className="text-lg font-bold">
+      <ScrollLink           to="home"
+          smooth={true}
+          duration={500}
+          className="text-lg font-bold">
         Tonder Store
-      </RouterLink>
+      </ScrollLink>
 
       <div className="hidden md:flex space-x-4">
         <ScrollLink
