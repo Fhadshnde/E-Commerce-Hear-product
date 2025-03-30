@@ -5,7 +5,24 @@ import { Link as RouterLink } from "react-router-dom";
 const CartPage = () => {
   const { cartItems, updateQuantity, handleDelete } = useCart();
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      alert("Your cart is empty! Add products before proceeding to checkout.");
+      return;
+    }
 
+    const orderMessage = cartItems
+      .map(
+        (item, index) =>
+          `#${index + 1}: ${item.title}\nPrice: $${item.price.toFixed(2)}\nQuantity: ${item.quantity}\nDescription: ${item.description}`
+      )
+      .join("\n\n");
+
+    const finalMessage = `Order Details:\n\n${orderMessage}\n\nTotal Price: $${totalPrice.toFixed(2)}`;
+    const whatsappUrl = `https://wa.me/9647721603705?text=${encodeURIComponent(finalMessage)}`;
+    window.open(whatsappUrl, "_blank");
+  };
   return (
     <div className="min-h-screen p-6 bg-gray-100 flex flex-col items-center">
       <Navbar />
@@ -57,6 +74,12 @@ const CartPage = () => {
             <h2 className="text-2xl font-semibold text-gray-800">Total Price</h2>
             <p className="text-2xl font-bold text-blue-600">${totalPrice.toFixed(2)}</p>
           </div>
+                    <button
+            onClick={handleCheckout}
+            className="mt-6 bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg text-lg font-semibold transition duration-300 w-full"
+          >
+            Checkout via WhatsApp
+          </button>
         </div>
       )}
     </div>
